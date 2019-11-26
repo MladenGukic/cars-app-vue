@@ -1,27 +1,30 @@
 <template>
   <div class="hello">
-    <h1>APPP</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      
+  <div>
+    <h3>Cars:</h3>
+    <ul v-for="car in cars" :key="car.id">
+      <li>
+        {{car.brand}}
+      </li>
     </ul>
-    <h3>Essential Links</h3>
-    <ul>
-    
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-    </ul>
+  </div>
   </div>
 </template>
 
 <script>
+import {carsService} from '../services/cars-service'
 export default {
- name: 'AppCars'
+  data() {
+    return {
+      cars: []
+    }
+  },
+
+  created() {
+    carsService.getCars()
+    .then(response => 
+    this.cars = response.data)
+  }
 }
 </script>
 
