@@ -1,7 +1,10 @@
 <template>
   <div id="app">
    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-     <router-link to="/cars">Cars</router-link>
+    <ul>
+        <router-link to="/cars">Cars</router-link> |
+        <router-link to="/add"> Add </router-link>
+    </ul>
    </nav> 
     <img alt="Vue logo" src="./assets/logo.png">
     <router-view/>

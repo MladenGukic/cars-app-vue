@@ -2,11 +2,17 @@ import axios from 'axios';
 
 export default class CarsService {
     constructor() {
-        axios.defaults.baseURL = 'http://localhost:3000/'
+        axios.defaults.baseURL = 'http://localhost:3000/api/'
     }
 
     getCars() {
-        return axios.get("/api/cars")
+        return axios.get("cars")
+    }
+
+    addCar(car) {
+
+      return  axios.post("cars", car)
+
     }
 
     // deleteCar(id) {
