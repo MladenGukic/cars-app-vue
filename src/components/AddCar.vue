@@ -1,27 +1,27 @@
 <template>
-  <div>
+  <div id="app">
       <form class="form-control">
-          <input placeholder="Brand" type="text" v-model="form.brand"/> <br>
-          <input placeholder="Model" type="text" v-model="form.model"/> <br>
-          <select id="" v-model="form.year">
+          <input placeholder="Brand" type="text" v-model="form.brand" pattern=".{2,}" required title="Minimum 2 characters"/> <br>
+          <input placeholder="Model" type="text" v-model="form.model" pattern=".{2,}" required title="Minimum 2 characters"/> <br>
+          <select id="" v-model="form.year" required>
                     <option disabled value="">Please select year</option>
                     <option v-for="year in years" :key="year">
                         {{year}}
                     </option>
           </select> <br>
           <input placeholder="MaxSpeed" type="number" v-model="form.maxSpeed"> <br>  
-          <input placeholder="Number of doors" type="number" v-model="form.numberOfDoors"> <br>
-            Automatic <input type="checkbox"  v-model="form.isAutomatic"> <br>
+          <input placeholder="Number of doors" type="number" v-model="form.numberOfDoors" required> <br>
+            Automatic <input type="checkbox"  v-model="form.isAutomatic" > <br>
             Engine: <br>
-           <input type="radio" v-model="form.engine" value="deisel"> Diesel  <br>
+           <input type="radio" v-model="form.engine" value="deisel" required> Diesel  <br>
            <input type="radio" v-model="form.engine" value="petrol"> Petrol <br>
            <input type="radio" v-model="form.engine" value="electric"> Electric <br>
            <input type="radio" v-model="form.engine" value="hybrid"> Hybrid <br>
-
-            <button type="submit" class="btn btn-primary mr-2" @click="addCar"> AddCar </button>
-            <button class="btn btn-secondary" @click="resetForm"> Reset </button>
+            <button type="submit" class="btn btn-primary mr-2" @click.stop.prevent="addCar"> AddCar </button>
+            <button type="button" class="btn btn-secondary mr-2" @click="resetForm"> Reset </button>
+            <button type="button" class="btn btn-warning mr-2" @click="previewForm"> Preview </button>
       </form>
-  </div>    
+  </div>
 </template>
 
 <script>
@@ -29,47 +29,17 @@ import {carsService} from '../services/cars-service'
 export default {
     data() {
         return {
-            form: { 
-                brand: "",
-                model: "",
-                year: 0,
-                maxSpeed: 0,
-                isAutomatic: false,
-                engine: "",
-                numberOfDoors: 0,
-            },
+            form: {
+  brand: "",
+  model: "",
+  year: "",
+  maxSpeed: "",
+  isAutomatic: false,
+  engine: "",
+  numberOfDoors : ""
+},
 
-             years: [
-        1990,
-        1991,
-        1992,
-        1993,
-        1994,
-        1995,
-        1996,
-        1997,
-        1998,
-        1999,
-        2000,
-        2001,
-        2002,
-        2003,
-        2004,
-        2005,
-        2006,
-        2007,
-        2008,
-        2009,
-        2010,
-        2011,
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017,
-        2018
-      ]
+             years: Array(20).fill(2000).map((n, i) => n + i)
     }
 
     },
@@ -83,11 +53,29 @@ export default {
         resetForm()
         {
             this.form = {}
+        },
+
+        previewForm() {
+            alert(
+             "Brand: " + this.form.brand +
+             " Model: " +  this.form.model +
+             " Max Speed: " +   this.form.maxSpeed +
+             " Is automatic: " +  this.form.isAutomatic +
+             " engine: " +  this.form.engine +
+            " Number of doors: " +  this.form.numberOfDoors
+            )
         }
     }
 }
 </script>
 
 <style>
-
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
 </style>
