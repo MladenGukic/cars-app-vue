@@ -15,9 +15,13 @@ export default class CarsService {
 
     }
 
-    // deleteCar(id) {
-    //     return axios.delete('' + id)
-    // }
+    get(id) {
+        return axios.get("cars/" + id)
+    }
+
+    deleteCar(id) {
+        return axios.delete('cars/' + id)
+    }
 }
 
 export const  carsService = new CarsService()

@@ -5,6 +5,9 @@
     <ul v-for="car in cars" :key="car.id">
       <li>
         {{car.brand}}
+        <button class="btn btn-warning" @click="navigateToEdit(car.id)">Edit</button>
+        <button type="submit" class="btn btn-danger" @click="deleteCar(car.id)">Delete</button>
+
       </li>
     </ul>
   </div>
@@ -24,6 +27,17 @@ export default {
     carsService.getCars()
     .then(response => 
     this.cars = response.data)
+  },
+
+  methods: {
+    navigateToEdit(id) {
+      this.$router.push({ name:'edit', params: {id} })
+    },
+
+    deleteCar(id) {
+      carsService.deleteCar(id)
+      this.cars = this.cars.filter(car => car.id !== id);
+    }
   }
 }
 </script>

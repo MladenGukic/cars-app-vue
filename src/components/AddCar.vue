@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <form class="form-control">
+      <form class="form-control" @submit.prevent="addCar">
           <input placeholder="Brand" type="text" v-model="form.brand" pattern=".{2,}" required title="Minimum 2 characters"/> <br>
           <input placeholder="Model" type="text" v-model="form.model" pattern=".{2,}" required title="Minimum 2 characters"/> <br>
           <select id="" v-model="form.year" required>
@@ -13,13 +13,14 @@
           <input placeholder="Number of doors" type="number" v-model="form.numberOfDoors" required> <br>
             Automatic <input type="checkbox"  v-model="form.isAutomatic" > <br>
             Engine: <br>
-           <input type="radio" v-model="form.engine" value="deisel" required> Diesel  <br>
+           <input type="radio" v-model="form.engine" value="deisel"> Diesel  <br>
            <input type="radio" v-model="form.engine" value="petrol"> Petrol <br>
            <input type="radio" v-model="form.engine" value="electric"> Electric <br>
            <input type="radio" v-model="form.engine" value="hybrid"> Hybrid <br>
-            <button type="submit" class="btn btn-primary mr-2" @click.stop.prevent="addCar"> AddCar </button>
+            <button type="submit" class="btn btn-primary mr-2"> AddCar </button>
+            <!-- <button type="submit" class="btn btn-warning mr-2" v-else > Edit </button> -->
             <button type="button" class="btn btn-secondary mr-2" @click="resetForm"> Reset </button>
-            <button type="button" class="btn btn-warning mr-2" @click="previewForm"> Preview </button>
+            <button type="button" class="btn btn-info mr-2" @click="previewForm"> Preview </button>
       </form>
   </div>
 </template>
@@ -30,19 +31,28 @@ export default {
     data() {
         return {
             form: {
-  brand: "",
-  model: "",
-  year: "",
-  maxSpeed: "",
-  isAutomatic: false,
-  engine: "",
-  numberOfDoors : ""
-},
+                brand: "",
+                model: "",
+                year: "",
+                maxSpeed: "",
+                isAutomatic: false,
+                engine: "",
+                numberOfDoors : ""
+            },
 
-             years: Array(20).fill(2000).map((n, i) => n + i)
-    }
+            years: Array(20).fill(2000).map((n, i) => n + i),
+        }
 
     },
+
+    // created() {
+    //     if(this.$route.params.id) {
+    //         carsService.get(parseInt(this.$route.params.id))
+    //         .then(response => {
+    //         this.form = response.data
+    //         })
+    //     }
+    // },
 
     methods: {
         addCar() {
@@ -64,7 +74,7 @@ export default {
              " engine: " +  this.form.engine +
             " Number of doors: " +  this.form.numberOfDoors
             )
-        }
+        },
     }
 }
 </script>
