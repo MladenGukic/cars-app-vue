@@ -1,25 +1,24 @@
 <template>
   <div id="app">
-      <form class="form-control" @submit.prevent="addCar">
-          <input placeholder="Brand" type="text" v-model="form.brand" pattern=".{2,}" required title="Minimum 2 characters"/> <br>
-          <input placeholder="Model" type="text" v-model="form.model" pattern=".{2,}" required title="Minimum 2 characters"/> <br>
-          <select id="" v-model="form.year" required>
+      <form class="form-control" @submit.prevent="onSubmit">
+          <input placeholder="Brand" type="text" v-model="carForm.brand" pattern=".{2,}" required title="Minimum 2 characters"/> <br>
+          <input placeholder="Model" type="text" v-model="carForm.model" pattern=".{2,}" required title="Minimum 2 characters"/> <br>
+          <select id="" v-model="carForm.year" required>
                     <option disabled value="">Please select year</option>
                     <option v-for="year in years" :key="year">
                         {{year}}
                     </option>
           </select> <br>
-          <input placeholder="MaxSpeed" type="number" v-model="form.maxSpeed"> <br>  
-          <input placeholder="Number of doors" type="number" v-model="form.numberOfDoors" required> <br>
-            Automatic <input type="checkbox"  v-model="form.isAutomatic" > <br>
+          <input placeholder="MaxSpeed" type="number" v-model="carForm.maxSpeed"> <br>  
+          <input placeholder="Number of doors" type="number" v-model="carForm.numberOfDoors" required> <br>
+            Automatic <input type="checkbox"  v-model="carForm.isAutomatic" > <br>
             Engine: <br>
-           <input type="radio" v-model="form.engine" value="deisel"> Diesel  <br>
-           <input type="radio" v-model="form.engine" value="petrol"> Petrol <br>
-           <input type="radio" v-model="form.engine" value="electric"> Electric <br>
-           <input type="radio" v-model="form.engine" value="hybrid"> Hybrid <br>
-            <button type="submit" class="btn btn-primary mr-2"> AddCar </button>
-            <!-- <button type="submit" class="btn btn-warning mr-2" v-else > Edit </button> -->
-            <button type="button" class="btn btn-secondary mr-2" @click="resetForm"> Reset </button>
+           <input type="radio" v-model="carForm.engine" value="deisel"> Diesel  <br>
+           <input type="radio" v-model="carForm.engine" value="petrol"> Petrol <br>
+           <input type="radio" v-model="carForm.engine" value="electric"> Electric <br>
+           <input type="radio" v-model="carForm.engine" value="hybrid"> Hybrid <br>
+            <button type="submit" class="btn btn-primary mr-2" > Submit </button>
+            <button type="button" class="btn btn-secondary mr-2" @click="resetCarForm()"> Reset </button>
             <button type="button" class="btn btn-info mr-2" @click="previewForm"> Preview </button>
       </form>
   </div>
@@ -39,31 +38,65 @@ export default {
                 engine: "",
                 numberOfDoors : ""
             },
+            car: {},
 
             years: Array(20).fill(2000).map((n, i) => n + i),
         }
 
     },
 
-    // created() {
-    //     if(this.$route.params.id) {
-    //         carsService.get(parseInt(this.$route.params.id))
-    //         .then(response => {
-    //         this.form = response.data
-    //         })
-    //     }
-    // },
+    created() {
+        // console.log('test')
+        if(this.$route.params.id) {
+            carsService.get(parseInt(this.$route.params.id))
+            .then(response => {
+            this.car = response.data
+            })
+        }
+    },
+
+    computed: {
+        carForm() {
+            return !this.$route.params.id ? this.form : this.car
+        }
+    },
 
     methods: {
-        addCar() {
-            carsService.addCar(this.form)
-            this.$router.push('/cars')
+
+        onSubmit () {
+            if(this.carForm.id) {
+                this.editCar()
+            } else {
+                this.addCar()
+            }
         },
 
-        resetForm()
-        {
-            this.form = {}
+        addCar() {
+            carsService.addCar(this.form)
+            .then(() => this.$router.push('/cars'))
         },
+
+        editCar() {
+            carsService.edit(this.carForm.id, this.carForm)
+            .then(() => this.$router.push('/cars'))
+        },
+
+        resetCarForm()
+        {
+            this.form = this.defaultForm()
+        },
+
+        defaultForm() {
+                return {
+                brand: "",
+                model: "",
+                year: "",
+                maxSpeed: "",
+                isAutomatic: false,
+                engine: "",
+                numberOfDoors : ""
+                }
+            },
 
         previewForm() {
             alert(
